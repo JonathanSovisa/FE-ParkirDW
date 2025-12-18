@@ -1,36 +1,60 @@
 class headerdatamhs extends HTMLElement {
   connectedCallback() {
+    const nama = localStorage.getItem("NAMA") || "MAHASISWA";
+
     this.innerHTML = `
-    <header>
-      <div class="main-header container">
-        <div class="brand">
-          <img src="./images/logo-ukdw.png" alt="Logo UKDW" class="logo">
-          <div class="brand-text">
-            <h1>PARKIRDW</h1>
-            <h4 style="color: #ffffff;">UNIVERSITAS KRISTEN DUTA WACANA</h4>
+      <header>
+        <div class="main-header container">
+          <div class="brand">
+            <img src="./images/logo-ukdw.png" alt="Logo UKDW" class="logo">
+            <div class="brand-text">
+              <h1>PARKIRDW</h1>
+              <h4 style="color: #ffffff;">UNIVERSITAS KRISTEN DUTA WACANA</h4>
+            </div>
           </div>
-        </div>
 
-        <div class="user-card">
-          <img src="./images/profil-jonathan.png" alt="Foto Profil" class="user-photo" />
-          <span class="user-name">Jonathan Sovisa</span>
-          
-          <div class="dropdown-toggle">⋮</div>
+          <div class="user-card">
+            <span class="user-name">${nama}</span>
 
-          <!-- Dropdown Menu (disembunyikan dulu) -->
-          <div class="dropdown-menu" id="dropdownMenu">
-            <button id="profileBtn">
-              <i class="fas fa-user"></i> Profile
-            </button>
-            <button id="logoutBtn">
-              <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
+            <div class="dropdown-toggle" id="dropdownToggle">⋮</div>
+
+            <div class="dropdown-menu" id="dropdownMenu">
+              <button id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </button>
+            </div>
           </div>
-        </div>
-      </div> 
-    </header>
+        </div> 
+      </header>
     `;
+
+    this.initEvents();
+  }
+
+  initEvents() {
+    const toggle = this.querySelector("#dropdownToggle");
+    const menu = this.querySelector("#dropdownMenu");
+    const logoutBtn = this.querySelector("#logoutBtn");
+
+    // buka / tutup dropdown
+    toggle.addEventListener("click", () => {
+      menu.classList.toggle("show");
+    });
+
+    // logout mahasiswa
+    logoutBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      localStorage.clear();
+      window.location.hash = "/login";
+    });
+
+    // klik luar nutup dropdown
+    document.addEventListener("click", (e) => {
+      if (!this.contains(e.target)) {
+        menu.classList.remove("show");
+      }
+    });
   }
 }
 
-customElements.define('header-datamhs', headerdatamhs);
+customElements.define("header-datamhs", headerdatamhs);

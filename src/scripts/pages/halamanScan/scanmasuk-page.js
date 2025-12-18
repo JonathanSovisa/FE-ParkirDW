@@ -6,10 +6,13 @@ export default class scanMasuk {
       <header-umum></header-umum>
 
       <main class="scan-masuk-container">
-        <section class="scan-card">
-          <div class="scan-info">
-            <h2 class="nama">NAMA MAHASISWA</h2>
+        <div class="scan-layout">
+
+          <!-- KIRI -->
+          <div class="scan-left">
+            <h2 class="nama">SCAN MASUK</h2>
             <p class="status">Mahasiswa Aktif UKDW Jogja</p>
+
             <p class="nopol">No. Polisi –</p>
 
             <div class="waktu">
@@ -17,14 +20,29 @@ export default class scanMasuk {
               <p><strong>Jam Masuk –</strong></p>
             </div>
 
-            <input type="text" class="nim-input" placeholder="Masukkan NIM..." disabled />
+            <!-- PILIH AREA -->
+            <select class="area-select">
+              <option value="">Pilih Area Parkir</option>
+            </select>
+
+            <!-- KONFIRMASI -->
+            <button class="btn-scan-masuk" disabled>
+              Konfirmasi Masuk
+            </button>
           </div>
-        </section>
+
+          <!-- KANAN -->
+          <div class="scan-right">
+            <div id="qr-reader" class="qr-reader"></div>
+          </div>
+
+        </div>
       </main>
     `;
   }
 
   async afterRender() {
-    // nanti di sini bisa kamu isi logika QR code scan
+    const presenter = await import('./scanmasuk-page-presenter.js');
+    presenter.default.init();
   }
 }

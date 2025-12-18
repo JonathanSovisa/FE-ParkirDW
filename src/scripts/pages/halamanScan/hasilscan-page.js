@@ -3,7 +3,7 @@ import '../../../components/headerumum.js';
 export default class hasilscan {
   async render() {
     // status bisa kamu ubah ke: 'in-success', 'in-fail', 'out-success', 'out-fail'
-    const status = 'in-success'; 
+    const status = 'out-fail'; 
 
     // variabel tampilan
     let icon = '';

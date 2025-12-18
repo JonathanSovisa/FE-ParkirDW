@@ -1,4 +1,5 @@
 import '../../../components/headerlanding.js';
+import LoginPresenter from './login-page-presenter.js';
 
 export default class login {
   async render() {
@@ -22,6 +23,7 @@ export default class login {
   }
 
   async afterRender() {
-    // Do your job here
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', LoginPresenter.handleLogin);
   }
 }

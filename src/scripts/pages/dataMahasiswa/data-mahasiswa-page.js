@@ -1,4 +1,5 @@
 import '../../../components/headerdatamhs.js';
+import DataMahasiswaPresenter from './data-mahasiswa-page-presenter.js';
 
 
 export default class datamhs {
@@ -10,143 +11,31 @@ export default class datamhs {
       <section class="student-container">
         <div class="profile-section">
           <div class="profile-box">
-            <div class="initial-box">JS</div>
+            <div class="initial-box"></div>
             <div class="profile-info">
-              <h2 class="name">JONATHAN SOVISA</h2>
-              <p class="status">Mahasiswa Aktif UKDW Jogja</p>
+              <h2 class="name"></h2>
+              <p class="status"></p>
             </div>
           </div>
 
           <div class="qr-section">
-            <img src="./images/qr-example.png" alt="QR Code" class="qr-img" />
-            <p class="qr-name">Jonathan Sovisa<br>Generate: 11 Juli 2025</p>
+            <img src="" alt="QR Code" class="qr-img" />
+            <p class="qr-name"></p>
             <p class="qr-link" id="lihatBarcode">Lihat Barcode</p>
           </div>
         </div>
 
-        
-
            <!-- AREA PARKIR -->
-<div class="parking-section">
-  <h3>AREA PARKIR TERSEDIA</h3>
-
-  <div class="parking-grid">
-    <div class="parking-row">
-      <div class="parking-slot">
-        <div class="slot-label">A1</div>
-        <div class="slot-value">15</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">A2</div>
-        <div class="slot-value">15</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">A3</div>
-        <div class="slot-value">15</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">A4</div>
-        <div class="slot-value">15</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">A5</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">A6</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">A7</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">A8</div>
-        <div class="slot-value">10</div>
-      </div>
-    </div>
-
-    <div class="parking-row">
-      <div class="parking-slot">
-        <div class="slot-label">B1</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">B2</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">B3</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">B4</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">B5</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">B6</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">B7</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">B8</div>
-        <div class="slot-value">10</div>
-      </div>
-    </div>
-
-    <div class="parking-row">
-      <div class="parking-slot">
-        <div class="slot-label">C1</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">C2</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">C3</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">C4</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">C5</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">C6</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">C7</div>
-        <div class="slot-value">10</div>
-      </div>
-      <div class="parking-slot">
-        <div class="slot-label">C8</div>
-        <div class="slot-value">10</div>
-      </div>
-    </div>
-
-  </div>
-</div>
+      <section class="parking-section">
+        <h3>AREA PARKIR TERSEDIA</h3>
+        <div class="parking-grid" id="parkingGrid"></div>
       </section>
-
-
-
+ 
       <!-- QR Popup -->
  <div class="qr-popup-overlay" id="qrPopup">
    <div class="qr-popup-box">
-     <img src="./images/qr-example.png" alt="QR Code" class="qr-popup-img" />
-     <div class="barcode-text">AB 2056 MQ</div>
+     <img src="" alt="QR Code" class="qr-popup-img" />
+     <div class="barcode-text"></div>
      <div class="npp-text">(Mahasiswa Aktif UKDW)</div>
      <button id="closeQrBtn" class="btn-close">Kembali</button>
    </div>
@@ -164,12 +53,13 @@ export default class datamhs {
     </div>
   </div>
 </div>
-
-
     `;
   }
 
   async afterRender() {
+
+    await DataMahasiswaPresenter.init();
+
 
     //Tombol Edit
     document.querySelectorAll('.fa-pen').forEach(btn =>
@@ -219,20 +109,7 @@ export default class datamhs {
 
     let selectedSlot = null;
 
-    // klik slot
-    parkingSlots.forEach(slot => {
-      slot.addEventListener('click', () => {
-        const label = slot.querySelector('.slot-label').textContent;
-        const capacity = slot.querySelector('.slot-value').textContent;
-
-        selectedSlot = label;
-        popupMessage.innerHTML = `
-          Apakah kamu ingin parkir di <strong>${label}</strong>?<br>
-          Kapasitas tersedia: <strong>${capacity}</strong> kendaraan.
-          `;
-        parkingPopup.style.display = 'flex';
-      });
-    });
+ 
 
     // tombol batal
     cancelBtn.addEventListener('click', () => {
@@ -240,11 +117,6 @@ export default class datamhs {
       selectedSlot = null;
     });
 
-    // tombol konfirmasi
-    confirmBtn.addEventListener('click', () => {
-      alert(`Kamu memilih parkir di slot ${selectedSlot}! 🚗`);
-      parkingPopup.style.display = 'none';
-    });
 
     // klik di luar popup
     window.addEventListener('click', (e) => {

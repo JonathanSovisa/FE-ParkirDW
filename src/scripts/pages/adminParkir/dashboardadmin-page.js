@@ -1,18 +1,25 @@
 import '../../../components/headeradmin.js';
 import '../../../components/sidebaradmin.js';
+import Chart from 'chart.js/auto';
+import DashboardAdminPresenter from './dashboardadmin-page-presenter.js';
 
-export default class dashboardadmin {
+let chartJamInstance = null;
+let chartPlatInstance = null;
+
+export default class DashboardAdminPage {
   async render() {
     return `
       <header-admin></header-admin>
       <div class="dashboard-container">
         <sidebar-admin></sidebar-admin>
+
         <main class="dashboard-content">
+
           <div class="admin-profile">
             <div class="profile-box">
-              <div class="initial-box">BY</div>
+              <div class="initial-box" id="adminInitial"></div>
               <div class="profile-info">
-                <h3>BAMBANG YUDIYONO</h3>
+                <h3 id="adminName"></h3>
                 <p>Admin Parkir UKDW Yogyakarta</p>
               </div>
             </div>
@@ -20,34 +27,183 @@ export default class dashboardadmin {
 
           <div class="stats-container">
             <div class="stat-box">
-              <h2>0</h2>
+              <h2 id="statMahasiswa">0</h2>
               <p>Mahasiswa Terdaftar</p>
             </div>
             <div class="stat-box">
-              <h2>0</h2>
+              <h2 id="statAdmin">0</h2>
               <p>Admin Terdaftar</p>
             </div>
             <div class="stat-box">
-              <h2>0</h2>
+              <h2 id="statKendaraan">0</h2>
               <p>Kendaraan Terdaftar</p>
             </div>
             <div class="stat-box">
-              <h2>500</h2>
+              <h2 id="statKapasitas">0</h2>
               <p>Kapasitas Tersedia</p>
             </div>
           </div>
+
+          <div class="charts-row">
+            <section class="chart-section">
+              <h3>Jam Sibuk Mahasiswa</h3>
+              <canvas id="chartJam"></canvas>
+            </section>
+
+            <section class="table-section">
+              <h3>Akumulasi Prodi</h3>
+              <table class="scan-table">
+                <thead>
+                  <tr>
+                    <th>Program Studi</th>
+                    <th>Jumlah Parkir</th>
+                  </tr>
+                </thead>
+                <tbody id="prodiTableBody"></tbody>
+              </table>
+            </section>
+          </div>
+
+          <div class="charts-row">
+            <section class="chart-section chart-plat-small">
+              <h3>Plat Kendaraan</h3>
+              <canvas id="chartPlat"></canvas>
+            </section>
+
+            <section class="table-section">
+              <h3>Aktivitas Scan Hari Ini</h3>
+              <table class="scan-table">
+                <thead>
+                  <tr>
+                    <th>NIM</th>
+                    <th>Prodi</th>
+                    <th>Masuk</th>
+                    <th>Keluar</th>
+                    <th>Area</th>
+                  </tr>
+                </thead>
+                <tbody id="scanTableBody"></tbody>
+              </table>
+            </section>
+          </div>
+
         </main>
       </div>
     `;
   }
 
-  async afterRender() {
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => {
-        alert('Kamu telah logout!');
-        // tambahkan redirect atau proses logout di sini
-      });
+async afterRender() {
+  const nama = localStorage.getItem('NAMA');
+  this.setAdminProfile(nama || "ADMIN");
+
+  this.presenter = new DashboardAdminPresenter(this);
+  await this.presenter.init();
+}
+
+
+
+  setAdminProfile(fullName) {
+  const nameEl = document.getElementById("adminName");
+  const initialEl = document.getElementById("adminInitial");
+
+  if (!nameEl || !initialEl) return;
+
+  nameEl.textContent = fullName.toUpperCase();
+
+  const initials = fullName
+    .split(" ")
+    .filter(n => n.length > 0)
+    .map(n => n[0])
+    .join("")
+    .toUpperCase();
+
+  initialEl.textContent = initials;
+}
+
+
+formatTime(value) {
+  if (!value) return "-";   // 🔥 PENTING
+
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return "-";
+
+  return d.toLocaleTimeString("id-ID", {
+    timeZone: "Asia/Jakarta",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+}
+
+
+
+  // ===== RENDER UI =====
+
+renderChartJam(data) {
+  if (chartJamInstance) chartJamInstance.destroy();
+
+  chartJamInstance = new Chart(document.getElementById("chartJam"), {
+    type: "bar",
+    data: {
+      labels: Object.keys(data),
+      datasets: [{
+        label: "Jumlah Kedatangan",
+        data: Object.values(data),
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          suggestedMax: Math.max(...Object.values(data)) + 1
+        }
+      }
     }
+  });
+}
+
+
+  renderChartPlat(data) {
+    if (chartPlatInstance) chartPlatInstance.destroy();
+
+    chartPlatInstance = new Chart(document.getElementById("chartPlat"), {
+      type: "pie",
+      data: {
+        labels: Object.keys(data),
+        datasets: [{ data: Object.values(data) }]
+      }
+    });
   }
+
+  renderProdiTable(data) {
+    const tbody = document.getElementById("prodiTableBody");
+    tbody.innerHTML = data.map(d => `
+      <tr>
+        <td>${d.namaProdi}</td>
+        <td>${d.total}</td>
+      </tr>
+    `).join("");
+  }
+
+renderScanTable(data) {
+  const tbody = document.getElementById("scanTableBody");
+
+  tbody.innerHTML = data.map(d => `
+    <tr>
+      <td>${d.NIM}</td>
+      <td>${d.namaProdi}</td>
+      <td>${this.formatTime(d.waktuMasuk)}</td>
+      <td>${d.waktuKeluar ? this.formatTime(d.waktuKeluar) : "-"}</td>
+      <td>${d.namaArea}</td>
+    </tr>
+  `).join("");
+}
+
+
+
+  updateMahasiswaStat(v) { document.getElementById("statMahasiswa").textContent = v; }
+  updateAdminStat(v) { document.getElementById("statAdmin").textContent = v; }
+  updateKendaraanStat(v) { document.getElementById("statKendaraan").textContent = v; }
+  updateKapasitasStat(v) { document.getElementById("statKapasitas").textContent = v; }
 }

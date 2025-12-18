@@ -7,8 +7,8 @@ class sidebaradmin extends HTMLElement {
           <ul>
             <li><a href="#/dashboardadmin" class="active">Dashboard</a></li>
             <li><a href="#/datakendaraan">Data Kendaraan Mahasiswa</a></li>
-            <li><a href="#/logmasuk">Log Transaksi Masuk</a></li>
-            <li><a href="#/logkeluar">Log Transaksi Keluar</a></li>
+            <li><a href="#/dataareaparkir">Data Area Parkir</a></li>
+            <li><a href="#/logtransaksi">Log Transaksi</a></li>
           </ul>
         </nav>
       </aside>
