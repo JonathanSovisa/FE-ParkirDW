@@ -66,7 +66,7 @@ export default class DashboardAdminPage {
 
           <div class="charts-row">
             <section class="chart-section chart-plat-small">
-              <h3>Plat Kendaraan</h3>
+              <h3>Scan Kendaraan</h3>
               <canvas id="chartPlat"></canvas>
             </section>
 
