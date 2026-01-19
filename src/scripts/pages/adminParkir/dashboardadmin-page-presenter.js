@@ -29,7 +29,7 @@ export default class DashboardAdminPresenter {
   async init() {
     await Promise.all([
       this.loadStats(),
-      this.loadChartJam(),
+      this.loadGaugeChartParkir(),
       this.loadProdiTerbanyak(),
       this.loadChartPlat(),
       this.loadScanHariIni()
@@ -51,41 +51,36 @@ export default class DashboardAdminPresenter {
     this.view.updateKapasitasStat(total);
   }
 
-  // =========================
-  // CHART JAM KEDATANGAN
-  // =========================
-  async loadChartJam() {
-  const { data } = await getAllScanLog();
 
-  const jamMap = {
-    "06.00 - 10.00": 0,
-    "10.00 - 14.00": 0,
-    "14.00 - 18.00": 0,
-    "18.00 - 22.00": 0,
-  };
 
-  data.forEach(item => {
-    const date = toDate(item.waktuMasuk);
-    if (!date) return;
 
-    // ✅ AMBIL JAM WIB (INI KUNCINYA)
-    const jam = Number(
-      date.toLocaleString("id-ID", {
-        timeZone: "Asia/Jakarta",
-        hour: "2-digit",
-        hour12: false
-      })
-    );
+async loadGaugeChartParkir() {
+  const [{ data: scanLog }, areaParkir] = await Promise.all([
+    getAllScanLog(),
+    getAllAreaParkir()
+  ]);
 
-    if (jam >= 6 && jam < 10) jamMap["06.00 - 10.00"]++;
-    else if (jam >= 10 && jam < 14) jamMap["10.00 - 14.00"]++;
-    else if (jam >= 14 && jam < 18) jamMap["14.00 - 18.00"]++;
-    else if (jam >= 18 && jam < 22) jamMap["18.00 - 22.00"]++;
+  // 1. Hitung kendaraan aktif
+  const parkirAktif = scanLog.filter(item => !item.waktuKeluar).length;
+
+  // 2. Hitung total kapasitas parkir (SUM)
+  const totalKapasitas = areaParkir.data.reduce(
+    (total, area) => total + Number(area.kapasitasTotal),
+    0
+  );
+
+  // 3. Hitung persentase (aman)
+  const persen = totalKapasitas
+    ? Math.round((parkirAktif / totalKapasitas) * 100)
+    : 0;
+
+  this.view.renderGaugeChart({
+    parkirAktif,
+    kapasitas: totalKapasitas,
+    persen
   });
-
-  console.log("Jam Map FIX:", jamMap);
-  this.view.renderChartJam(jamMap);
 }
+
 
   // =========================
   // PRODI TERBANYAK

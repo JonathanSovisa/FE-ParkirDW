@@ -45,10 +45,6 @@ export default class DashboardAdminPage {
           </div>
 
           <div class="charts-row">
-            <section class="chart-section">
-              <h3>Jam Sibuk Mahasiswa</h3>
-              <canvas id="chartJam"></canvas>
-            </section>
 
             <section class="table-section">
               <h3>Akumulasi Prodi</h3>
@@ -61,13 +57,6 @@ export default class DashboardAdminPage {
                 </thead>
                 <tbody id="prodiTableBody"></tbody>
               </table>
-            </section>
-          </div>
-
-          <div class="charts-row">
-            <section class="chart-section chart-plat-small">
-              <h3>Scan Kendaraan</h3>
-              <canvas id="chartPlat"></canvas>
             </section>
 
             <section class="table-section">
@@ -85,6 +74,29 @@ export default class DashboardAdminPage {
                 <tbody id="scanTableBody"></tbody>
               </table>
             </section>
+
+             <section class="chart-section">
+              <h3>Kondisi Parkir B2 Saat Ini</h3>
+
+              <div class="parkir-gauge">
+                <div class="progress">
+                  <div class="progress-bar" id="parkirGauge"></div>
+                </div>
+                <p id="parkirText"></p>
+              </div>
+
+            </section>
+
+            <section class="chart-section chart-plat-small">
+              <h3>Plat Kendaraan</h3>
+              <canvas id="chartPlat"></canvas>
+            </section>
+
+            
+          </div>
+
+          <div class="charts-row">
+            
           </div>
 
         </main>
@@ -198,6 +210,20 @@ renderScanTable(data) {
       <td>${d.namaArea}</td>
     </tr>
   `).join("");
+}
+
+
+renderGaugeChart({ parkirAktif, kapasitas, persen }) {
+  const bar = document.getElementById('parkirGauge');
+  const text = document.getElementById('parkirText');
+
+  bar.style.width = `${persen}%`;
+
+  if (persen < 60) bar.style.backgroundColor = '#22c55e';
+  else if (persen < 85) bar.style.backgroundColor = '#facc15';
+  else bar.style.backgroundColor = '#ef4444';
+
+  text.innerText = `${parkirAktif} / ${kapasitas} kendaraan (${persen}%)`;
 }
 
 

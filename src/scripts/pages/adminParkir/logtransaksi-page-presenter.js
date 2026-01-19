@@ -20,9 +20,7 @@ const formatWIB = (value) => {
   });
 };
 
-// =========================
-// PRESENTER (SAMA KAYAK DATA AREA PARKIR)
-// =========================
+
 const LogTransaksiPresenter = {
   async init() {
     this.data = [];
@@ -116,7 +114,7 @@ const LogTransaksiPresenter = {
       `;
     });
 
-    // ✅ PAGE INFO (SAMA KAYAK CONTOH)
+    
     document.getElementById('pageInfo').innerHTML =
       `Halaman ${this.currentPage} / ${this.totalPages() || 1}`;
   }

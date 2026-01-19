@@ -1571,8 +1571,8 @@ header {
 /* WRAPPER SETIAP BARIS GRAFIK */
 .charts-row {
   display: flex;
-  gap: 24px;                /* Jarak antar card grafik */
-  justify-content: space-between;
+  gap: 30px;                /* Jarak antar card grafik */
+  justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: wrap;
   margin-bottom: 30px;      /* Jarak antar baris grafik */
@@ -1583,7 +1583,7 @@ header {
 .chart-section {
   flex: 1;
   min-width: 380px;
-  max-width: 600px;
+  max-width: 550px;
   padding: 20px;
   background: #ffffff;
   border-radius: 12px;
@@ -1599,13 +1599,41 @@ header {
 /* CANVAS */
 
 .chart-plat-small {
-  max-width: 350px;   /* perkecil width card */
+  max-width: 200px;   /* perkecil width card */
+  margin-left: 0px;
 }
 
 
 .chart-section canvas {
-  height: 220px !important; /* agak lebih kecil biar seimbang */
+  height: 250px !important; /* agak lebih kecil biar seimbang */
 }
+
+
+.parkir-gauge {
+  margin-top: 12px;
+}
+
+.progress {
+  width: 100%;
+  height: 22px;
+  background-color: #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #22c55e;
+  transition: width 0.5s ease;
+}
+
+#parkirText {
+  margin-top: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
 
 /* ==== TABEL SCAN (BIAR ADA GARIS) ==== */
 .table-section {

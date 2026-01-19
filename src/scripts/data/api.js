@@ -100,7 +100,7 @@ export async function getProgramStudi() {
 
 
 
-// ------------------------- API KENDARAAN - GET, UPDATE, DELETE --------------------------------------
+
 
 // GET - Ambil kendaraan berdasarkan NIM UNTUK menampilkan Barcode
 export async function getKendaraanByNIM(nim) {

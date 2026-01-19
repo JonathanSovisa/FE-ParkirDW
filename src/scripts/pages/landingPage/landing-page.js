@@ -3,8 +3,11 @@ import '../../../components/headerlanding.js';
 export default class landingPage {
   async render() {
     return `
-      <header-landing></header-landing>
-      
+      <header-landing>
+            <nav class="breadcrumb">
+  <ul id="breadcrumbList"></ul>
+</nav></header-landing>
+
       <section id="home" class="hero-section" style="background-image: url('./images/bg-campus.jpg'); background-size: cover; background-position: center;">
         <div class="hero-overlay">
           <div class="hero-content">

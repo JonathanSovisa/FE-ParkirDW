@@ -51,7 +51,7 @@ const LoginPresenter = {
       }
 
     } catch (error) {
-      showToast('Login gagal: ' + error.message);
+      showToast('Login gagal: ' + error.message, 'error');
     }
   },
 
